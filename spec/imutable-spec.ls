@@ -56,6 +56,7 @@ describe 'on imutable class' ->
     before-each ->
       ImClass := imutable \recursive class
         @value = \value
+        @nested = value: \nested-value
         (@v=0, @dep=value:0) ->
         vv: -> @v * 2
         method: -> \method-result
@@ -63,6 +64,8 @@ describe 'on imutable class' ->
           -> @dep.value
           (v) -> @dep.value = v
     common-tests!
+    that 'class nested value are readonly' ->
+      expect (-> ImClass.nested.value = \other) .to.throw Error
     describe 'outbound properties' ->
       before-each ->
         dep := value: 10
@@ -74,6 +77,15 @@ describe 'on imutable class' ->
       that 'depending object property is readonly' ->
         change-dep-property = -> dep.value = \other
         expect change-dep-property .to.throw /read only/
+    describe 'nested recursion' ->
+      before-each ->
+        dep := nested: value: 10
+        im-obj := new ImClass 0, dep
+      that 'nested object has imutable flag' ->
+        expect dep.nested.__imutable__ .to.be.true
+      that 'nested object\'s property is readonly' ->
+        set-nested-value = -> dep.nested.value = 13
+        expect set-nested-value .to.throw /read only/
 
 function common-tests
   that 'class __imutable__ flag is on' ->
