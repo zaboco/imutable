@@ -86,7 +86,7 @@ describe 'on imutable class' ->
       that 'nested object\'s property is readonly' ->
         set-nested-value = -> dep.nested.value = 13
         expect set-nested-value .to.throw /read only/
-      that.skip 'hidden nested property has __imutable__ flag' ->
+      that 'hidden nested property has __imutable__ flag' ->
         expect im-obj.hidden-nested.__imutable__ .to.be.true
 
 function common-tests
