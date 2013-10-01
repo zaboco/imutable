@@ -58,6 +58,7 @@ describe 'on imutable class' ->
         @value = \value
         @nested = value: \nested-value
         (@v=0, @dep=value:0) ->
+          Object.define-property @, \hiddenNested, value: value: \hidden-value
         vv: -> @v * 2
         method: -> \method-result
         dep-value:~
@@ -81,11 +82,13 @@ describe 'on imutable class' ->
       before-each ->
         dep := nested: value: 10
         im-obj := new ImClass 0, dep
-      that 'nested object has imutable flag' ->
+      that 'nested object has __imutable__ flag' ->
         expect dep.nested.__imutable__ .to.be.true
       that 'nested object\'s property is readonly' ->
         set-nested-value = -> dep.nested.value = 13
         expect set-nested-value .to.throw /read only/
+      that.skip 'hidden nested property has __imutable__ flag' ->
+        expect im-obj.hidden-nested.__imutable__ .to.be.true
 
 function common-tests
   that 'class __imutable__ flag is on' ->
