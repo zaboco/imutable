@@ -30,12 +30,54 @@ describe 'on imutable class' ->
       that 'setter modifies depending object' ->
         im-obj.dep-value = 12
         expect im-obj.dep-value .to.eql 12
-      # im-obj.dep-value = 2
 
+  describe 'w/ strict modifier' ->
+    before-each ->
+      ImClass := imutable \strict class
+        @value = \value
+        (@v=0, @dep=value:0) ->
+        vv: -> @v * 2
+        method: -> \method-result
+        dep-value:~
+          -> @dep.value
+          (v) -> @dep.value = v
+    common-tests!
+    describe 'outbound properties' ->
+      before-each ->
+        dep := value: 10
+        im-obj := new ImClass 0, dep
+      that 'getter returns depending object\'s value' ->
+        expect im-obj.dep-value .to.eql dep.value
+      that 'setter is removed' ->
+        set-property = -> im-obj.dep-value = 12
+        expect set-property .to.throw /cannot set property/i
+
+  describe 'w/ recursive modifier' ->
+    before-each ->
+      ImClass := imutable \recursive class
+        @value = \value
+        (@v=0, @dep=value:0) ->
+        vv: -> @v * 2
+        method: -> \method-result
+        dep-value:~
+          -> @dep.value
+          (v) -> @dep.value = v
+    common-tests!
+    describe 'outbound properties' ->
+      before-each ->
+        dep := value: 10
+        im-obj := new ImClass 0, dep
+      that 'getter returns depending object\'s value' ->
+        expect im-obj.dep-value .to.eql dep.value
+      that 'depending object has __imutable__ flag' ->
+        expect dep.__imutable__ .to.be.true
+      that 'depending object property is readonly' ->
+        change-dep-property = -> dep.value = \other
+        expect change-dep-property .to.throw /read only/
 
 function common-tests
-  that 'class imutable flag is on' ->
-    expect ImClass.imutable .to.be.true
+  that 'class __imutable__ flag is on' ->
+    expect ImClass.__imutable__ .to.be.true
   that 'class values are accesible' ->
     expect ImClass.value .to.eql \value
   that 'class values are readonly' ->
@@ -43,6 +85,8 @@ function common-tests
   describe 'instance' ->
     before-each ->
       im-obj := new ImClass 1
+    that 'has __imutable__ flag set' ->
+      expect im-obj.__imutable__ .to.be.true
     that 'value properties are accesible' ->
       expect im-obj.v .to.eql 1
     that 'value properties are readonly' ->
@@ -60,6 +104,8 @@ function common-tests
   describe 'prototype' ->
     before-each ->
       im-proto := ImClass::
+    that 'has __imutable__ flag set' ->
+      expect im-obj.__imutable__ .to.be.true
     that 'methods are callable' ->
       expect im-proto.method! .to.eql \method-result
     that 'methods cannot be changed' ->

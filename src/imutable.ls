@@ -9,17 +9,21 @@ remove-property-setters = (klass) ->
     .filter has-setter proto
     .for-each remove-setter proto
 
+make-imutable = (obj) ->
+  obj.__imutable__ = yes
+  Object.freeze obj
+
 freeze-child-objects = (obj) ->
-  Object.get-own-property-names @ .for-each ~>
-    Object.freeze @[it] if typeof @[it] is \object
+  Object.get-own-property-names obj .for-each ~>
+    make-imutable obj[it] if typeof obj[it] is \object
 
 imutable = (option, klass) ->
   [klass, option] = [option, ''] if typeof option is \function
   remove-property-setters klass if option is \strict
-  Object.freeze klass::
+  make-imutable klass::
   im-klass = surround-constructor klass, after: ->
     Object.freeze @
     freeze-child-objects @ if option is \recursive
-  Object.freeze im-klass <<< imutable: yes
+  make-imutable im-klass
 
 module.exports = imutable
