@@ -8,7 +8,6 @@ require! {
 that = it
 var ImClass, im-obj, im-proto, dep
 
-
 describe 'on imutable class' ->
   describe 'w/ no modifiers' ->
     before-each ->
