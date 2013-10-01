@@ -1,0 +1,37 @@
+{
+  "name": "imutable",
+  "version": "0.0.1",
+  "description": "imutable module",
+  "dependencies": {
+    "surround-constructor": "~0.0.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-livescript": "~0.5.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-lineending": "~0.2.1",
+    "grunt-verbosity": "~0.2.2",
+    "grunt-mocha-test": "~0.7.0",
+    "mocha": "~1.13.0",
+    "chai": "~1.8.0",
+    "sinon": "~1.7.3",
+    "sinon-chai": "~2.4.0"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "grunt test",
+    "prepublish": "grunt dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zaboco/imutable.git"
+  },
+  "keywords": [
+    "imutable",
+    "class"
+  ],
+  "author": "Bogdan Zaharia",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
