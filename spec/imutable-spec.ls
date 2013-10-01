@@ -105,6 +105,8 @@ function common-tests
       expect im-obj.v .to.eql 1
     that 'value properties are readonly' ->
       expect (-> im-obj.v = 2) .to.throw /read only/
+    that 'value properties cannot be deleted' ->
+      expect (-> delete im-obj.v) .to.throw /cannot delete/i
     that 'value properties cannot be redefined' ->
       redefine-property = ->
         Object.define-property im-obj, \v, value: 3
