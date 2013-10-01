@@ -1,7 +1,7 @@
 {
   "name": "imutable",
   "version": "0.0.1",
-  "description": "imutable module",
+  "description": "Makes a class and its instances imutable",
   "dependencies": {
     "surround-constructor": "~0.0.2"
   },
