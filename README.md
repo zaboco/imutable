@@ -44,7 +44,7 @@ console.log im-obj.dep-value # 1
 im-obj.dep-value = 2
 console.log im-obj.dep-value # 2 !!!
 ```
-So, this object is not so imutable after all. That's because (`Object.freeze`)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze] does not remove property setters.
+So, this object is not so imutable after all. That's because [`Object.freeze`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze) does not remove property setters.
 
 In this case you can use `imutable \strict`, which does exactly that, removes all setters.
 
