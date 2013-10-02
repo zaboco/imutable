@@ -6,6 +6,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-lineending");
   grunt.loadNpmTasks("grunt-verbosity");
 
+  var lsc = "grunt-livescript/node_modules/LiveScript"
   grunt.initConfig({
     clean: {
       lib: 'lib/'
@@ -24,7 +25,7 @@ module.exports = function(grunt) {
     mochaTest: {
       options: {
         reporter: "spec",
-        require: "grunt-livescript/node_modules/dslivescript"
+        require: lsc
       },
       test: {
         src: "spec/*.ls"
@@ -54,7 +55,7 @@ module.exports = function(grunt) {
     grunt.log.ok('________________________________________');
     grunt.util.spawn({
       cmd: 'mocha',
-      args: ['--compilers', 'ls:grunt-livescript/node_modules/dslivescript', '-R', 'min', specPath],
+      args: ['--compilers', 'ls:'+ lsc, '-R', 'min', specPath],
       opts: {stdio: 'inherit'}
     }, function done() {
       grunt.log.ok('========================================');
