@@ -4,10 +4,10 @@ has-setter = (obj, prop) --> (obj.__lookup-setter__ prop)?
 remove-setter = (obj, prop) --> Object.define-property obj, prop, set: void
 
 remove-property-setters = (klass) ->
-  proto = klass::
-  Object.get-own-property-names proto
-    .filter has-setter proto
-    .for-each remove-setter proto
+  klass::
+    Object.get-own-property-names ..
+      .filter has-setter ..
+      .for-each remove-setter ..
 
 function make-imutable obj, {recursive=false, hidden=false} = {}
   make-children-imutable obj, {+recursive, hidden} if recursive
